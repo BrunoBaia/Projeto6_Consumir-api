@@ -2,15 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { get } from 'lodash';
 import { FaUserCircle, FaEdit, FaWindowClose, FaExclamation } from 'react-icons/fa';
+import { useDispatch } from 'react-redux';
 
 import { Container } from '../../styles/GlobalStyles';
 import { Alunoh1, AlunoContainer, ProfilePicture, NovoAluno } from './styled';
 import axios from '../../services/axios';
-import history from '../../services/history';
 import { toast } from 'react-toastify';
 import Loading from '../../components/Loading/index';
+import * as actions from '../../store/modules/auth/actions';
 
 export default function Alunos() {
+  const dispatch = useDispatch();
   const [alunos, setAlunos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -51,9 +53,7 @@ export default function Alunos() {
       setIsLoading(false);
 
       errors.map(error => toast.error(error));
-      if (status === 401) {
-        history.push('/login');
-      }
+      if (status === 401) dispatch(actions.loginFailure());
     }
   }
 
